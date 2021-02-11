@@ -1,0 +1,20 @@
+{
+  "name": "sofy-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "tedious": "^11.0.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://quantyzd.visualstudio.com/SOFY3.0/_git/sofy-node-backend"
+  },
+  "author": "",
+  "license": "ISC"
+}
