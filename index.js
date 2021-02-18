@@ -19,6 +19,9 @@ const passport = require('passport');
 
   app.use(require('./routes'));
 
-  app.listen(3000, () => {
+  require('./Startup/routes')(app);
+
+  app.listen(8000, function() {
+    console.log('SOFY-NODE SERVER IS UP AND RUNNING...');
   });
 })()

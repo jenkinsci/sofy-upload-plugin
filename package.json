@@ -9,9 +9,8 @@
     "express": "^4.17.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
-    "tedious": "^11.0.3"
+    "mssql": "^6.3.1"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
