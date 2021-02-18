@@ -1,36 +1,20 @@
-const Connection = require("tedious").Connection;
+require('dotenv/config')
+const sql = require('mssql');
 
 const config = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASS,
   server: process.env.DB_HOST,
-  authentication: {
-    type: "default",
-    options: {
-      userName: process.env.DB_USER,
-      password: process.env.DB_PASS,
-    },
-  },
-  options: {
-    port: 1433,
-    database: process.env.DB_NAME,
-  },
+  database: process.env.DB_NAME,
+  port: 1433,
 };
 
-const connect = () => {
-  return new Promise((resolve, reject) => {
-    const connection = new Connection(config);
+const poolPromise = new sql.ConnectionPool(config);
+const pool = poolPromise.connect().then(() =>{
+  console.log('Connected TO MSSQL...')
+})
+.catch(err => console.log('Database Connection Failed! Bad Config:', err))
 
-    connection.on("connect", function (err) {
-      if (err) {
-        console.log(err);
-        reject(err);
-      } else {
-        console.log("Database connected successfully!");
-        resolve();
-      }
-    });
-
-    connection.connect();
-  });
-};
-
-module.exports = connect;
+module.exports = {
+  sql, poolPromise
+}
