@@ -1,9 +1,23 @@
 const router = require("express").Router();
 const passport = require("passport");
 const utils = require("../lib/utils");
+const { Request } = require("tedious");
+const {
+  auth: { login },
+} = require("../controller");
+
+router.get("login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await login(email, password);
+    res.json(user);
+  } catch (error) {
+    debugger;
+  }
+});
 
 router.get(
-  "/protected", 
+  "/protected",
   passport.authenticate("jwt", { session: false }),
   (req, res, next) => {
     res.status(200).json({
@@ -21,11 +35,38 @@ router.post("/login", function (req, res, next) {
     "5f75833aed44fd2aa1e5917723128909c0c06288a25b40620c0d6b829e8ff11d"
   );
 
+  const request = new Request(
+    "select * from Users where Email = 'taha@sofy.ai'",
+    function (err, rowCount) {
+      debugger;
+    }
+  );
+
+  request.on("row", (columns) => {
+    columns.forEach((column) => {
+      if (column.value === null) {
+        console.log("NULL");
+      } else {
+        console.log(column.value);
+      }
+    });
+  });
+
+  request.on("done", (rowCount) => {
+    console.log("Done is called!");
+  });
+
+  request.on("doneInProc", (rowCount, more) => {
+    console.log(rowCount + " rows returned");
+  });
+
+  global.dbConnection.execSql(request);
+
   debugger;
-  const tokenObject =utils.issueJWT({
+  const tokenObject = utils.issueJWT({
     _id: 1,
     name: "taha",
-  })
+  });
   debugger;
 
   // User.findOne({ username: req.body.username })
@@ -74,7 +115,7 @@ router.post("/register", function (req, res, next) {
   });
 
   try {
-    debugger
+    debugger;
     // newUser.save().then((user) => {
     //   res.json({ success: true, user: user });
     // });

@@ -1,17 +1,15 @@
 const express = require('express');
 const cors = require('cors');
-const passport = require('passport');
+const db = require("./config/db");
 
 (async() => {
   require('dotenv').config();
 
-  await require("./config/db-connect")();
+  await db.connect();
 
-  var app = express();
+  const app = express();
 
-  require('./config/passport')(passport);
-
-  app.use(passport.initialize());
+  require('./config/passport')(app);
 
   app.use(express.json());
   app.use(express.urlencoded({extended: true}));
@@ -19,9 +17,7 @@ const passport = require('passport');
 
   app.use(require('./routes'));
 
-  require('./Startup/routes')(app);
-
   app.listen(8000, function() {
-    console.log('SOFY-NODE SERVER IS UP AND RUNNING...');
+    console.log('Sofy server is up and running');
   });
 })()
