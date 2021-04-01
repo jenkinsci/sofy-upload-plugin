@@ -9,25 +9,22 @@ const gateway = new braintree.BraintreeGateway({
     privateKey: "a7237c4a19e98d43565a72e25d68c358"
 });
 
-const BTTokenGeneration = async (userID) => {
-    console.log(userID);
-    let stringGuid = String(userID);
+const BTTokenGeneration = async (userGuid) => {
+    console.log(userGuid);
     const userDataFromUserBrainTreeDetails = await poolPromise.request()
-        .input('userID', sql.BigInt, userID)
-        .query('select * from Users where UserID = @userID');
-    console.log(userDataFromUserBrainTreeDetails);
-    var recordset = userDataFromUserBrainTreeDetails.recordset;
-        return { recordset }
-    if (!userDataFromUserBrainTreeDetails.length) {
-        const {
-            recordset: userDataFromUsers,
-        } = await sql.query`Select * from Users where UserGUID = ${userGuid}`;
-        if (userDataFromUsers.lenght) {
+        .input('userGuid', userGuid)
+        .query('select * from SubscriptionsBTPayments where BTCustomerID = @userGuid');
+        console.log(userDataFromUserBrainTreeDetails.recordset.length);
+    if (userDataFromUserBrainTreeDetails.recordset.length == 0) {
+        const userDataFromUsers = await poolPromise.request()
+        .input('userGuid', userGuid)
+        .query('Select * from Users where UserGUID = @userGuid');
+        if (userDataFromUsers.lenght != 0) {
             gateway.customer.create({
-                Id: userDataFromUsers[0].UserGUID,
-                FirstName: userDataFromUsers[0].FirstName,
-                company: userDataFromUsers[0].CompanyId,
-                email: userDataFromUsers[0].Email,
+                Id: userDataFromUsers.recordset[0].UserGUID,
+                FirstName: userDataFromUsers.recordset[0].FirstName,
+                company: userDataFromUsers.recordset[0].CompanyId,
+                email: userDataFromUsers.recordset[0].Email,
             }, (err, result) => {
                 if (result.success) {
                     gateway.clientToken.generate({
@@ -43,12 +40,13 @@ const BTTokenGeneration = async (userID) => {
             return { "ErrorMessage": "No user regitsered against given guid" };
         }
     }
-    else if (userDataFromUserBrainTreeDetails.length) {
+    else{
         gateway.clientToken.generate({
             customerId: userGuid
-        }, (err, response) => {
+        },  (err, response) => {
+            console.log(response);
             const clientToken = response.clientToken
-            return { clientToken };
+            return {clientToken}        
         });
     }
 };
