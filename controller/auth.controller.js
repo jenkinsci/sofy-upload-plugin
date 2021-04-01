@@ -1,17 +1,22 @@
 const sql = require("mssql");
-
+const {poolPromise} = require("../config/db")
 const utils = require("../lib/utils");
 
 const login = async (email, password) => {
   const {
-    recordset,
-  } = await sql.query`select * from Users where Email = ${email}`;
+    recordset
+  } = await poolPromise.request().input('email', email).query('select * from Users where Email = @email');
 
   if (!recordset.length) {
     throw Error("User not found");
   }
 
+  console.log(recordset);
+
   let user = recordset[0];
+
+  console.log(user.password)
+  console.log(password)
 
   const isValid = user.Password === password;
 

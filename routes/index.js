@@ -6,7 +6,8 @@ router.use("/users", require("./users.routes.js"));
 router.use(
   "/device-groups",
   passport.authenticate("jwt", { session: false }),
-  require("./device-groups.routes")
-);
+  require("./device-groups.routes"));
+  router.use(
+    "/subscription", require("./subscription.route.js"));
 
 module.exports = router;
