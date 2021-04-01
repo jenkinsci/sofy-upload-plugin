@@ -1,5 +1,5 @@
 const sql = require("mssql");
-const {poolPromise} = require("../config/db")
+const { poolPromise } = require("../config/db")
 const braintree = require("braintree");
 
 const gateway = new braintree.BraintreeGateway({
@@ -14,11 +14,11 @@ const BTTokenGeneration = async (userGuid) => {
     const userDataFromUserBrainTreeDetails = await poolPromise.request()
         .input('userGuid', userGuid)
         .query('select * from SubscriptionsBTPayments where BTCustomerID = @userGuid');
-        console.log(userDataFromUserBrainTreeDetails.recordset.length);
+    console.log(userDataFromUserBrainTreeDetails.recordset.length);
     if (userDataFromUserBrainTreeDetails.recordset.length == 0) {
         const userDataFromUsers = await poolPromise.request()
-        .input('userGuid', userGuid)
-        .query('Select * from Users where UserGUID = @userGuid');
+            .input('userGuid', userGuid)
+            .query('Select * from Users where UserGUID = @userGuid');
         if (userDataFromUsers.lenght != 0) {
             gateway.customer.create({
                 Id: userDataFromUsers.recordset[0].UserGUID,
@@ -40,14 +40,18 @@ const BTTokenGeneration = async (userGuid) => {
             return { "ErrorMessage": "No user regitsered against given guid" };
         }
     }
-    else{
-        gateway.clientToken.generate({
-            customerId: userGuid
-        },  (err, response) => {
-            console.log(response);
-            const clientToken = response.clientToken
-            return {clientToken}        
+    else {
+        const token = await new Promise((resolve, reject) => {
+            gateway.clientToken.generate({
+                customerId: userGuid
+            }).then(response => {
+                resolve(response);
+            }).catch(err => {
+                console.log(err);
+                reject(err);
+            });
         });
+        return token;
     }
 };
 
