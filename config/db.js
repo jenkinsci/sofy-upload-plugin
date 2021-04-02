@@ -1,4 +1,4 @@
-require('dotenv/config')
+require("dotenv/config");
 const sql = require("mssql");
 
 const config = {
@@ -12,12 +12,17 @@ const config = {
   }
 };
 
-const poolPromise = new sql.ConnectionPool(config);
-const pool = poolPromise.connect().then(() => {
-  console.log('Connected TO MSSQL...')
-})
-  .catch(err => console.log('Database Connection Failed! Bad Config:', err))
+const db = new sql.ConnectionPool(config);
+
+const connect = async () => {
+  await db.connect().then(() => {
+    console.log('Connected TO MSSQL')
+  }).catch(err => {
+    console.log('Database Connection Failed!', err)
+  });
+};
 
 module.exports = {
-  poolPromise
+  db,
+  connect
 };
