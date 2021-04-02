@@ -71,6 +71,45 @@ const BTTokenGeneration = async (userGuid) => {
     }
 };
 
+const CancelSubscription = async (userGuid) =>
+{
+    try {
+        const currentSubscriptionID = await poolPromise.request()
+        .input('userGuid', userGuid)
+        .query('select subscriptionBTID from subscriptionsBTpayments where BTCustomerID = @userGuid and SubscriptionBTStatus = \'ACTIVE\'');
+        if(currentSubscriptionID.lenght != 0)
+        {
+            var subscriptionIDFromDB = currentSubscriptionID.recordset[0].subscriptionBTID;
+            const subscriptionCancelStatus = await new Promise((resolve, reject) => {
+                gateway.subscription.cancel(subscriptionIDFromDB).then(response => {
+                    resolve(response);
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
+            if(subscriptionCancelStatus.success)
+            {
+                await poolPromise.request()
+                .input('subscriptionID', subscriptionIDFromDB)
+                .query('update subscriptionsBTpayments set SubscriptionBTStatus = \'CANCELLED\' where SubscriptionBTID = @subscriptionID and SubscriptionBTStatus = \'ACTIVE\'')
+                return {"Message" : "Subscription Successfully Cancelled", "StatusCode":"200"}
+            }
+            else{
+                return {"Message" : subscriptionCancelStatus.message, "StatusCode":"406"}
+            }
+        }
+        else
+        {
+            return {"Message" : "No active subscriptions of this user", "StatusCode":"404"}
+        }
+    } catch (error) {
+        console.log(error);
+        return { "Message" : error, "StatusCode":"404" };
+    }
+}
+
 module.exports = {
     BTTokenGeneration,
+    CancelSubscription
 };

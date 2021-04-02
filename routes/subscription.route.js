@@ -1,6 +1,7 @@
 const router = require("express").Router();
 
-const { token: { BTTokenGeneration }, } = require("../controller");
+const { subscription: { BTTokenGeneration }, } = require("../controller");
+const { subscription: { CancelSubscription }, } = require("../controller");
 
 router.get("/getClientToken/:userGuid", async (req, res) => {
   const userGuid = req.params.userGuid;
@@ -12,5 +13,15 @@ router.get("/getClientToken/:userGuid", async (req, res) => {
   }
 });
 
+router.post("/cancelSubscription/:userGuid", async (req, res) => {
+    var userGuid = req.params.userGuid;
+    try {
+      var status = await CancelSubscription(userGuid);
+      res.status(status.StatusCode).json(status);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+  
 
 module.exports = router;
