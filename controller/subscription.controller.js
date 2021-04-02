@@ -20,21 +20,37 @@ const BTTokenGeneration = async (userGuid) => {
             .input('userGuid', userGuid)
             .query('Select * from Users where UserGUID = @userGuid');
         if (userDataFromUsers.lenght != 0) {
-            gateway.customer.create({
-                Id: userDataFromUsers.recordset[0].UserGUID,
-                FirstName: userDataFromUsers.recordset[0].FirstName,
-                company: userDataFromUsers.recordset[0].CompanyId,
-                email: userDataFromUsers.recordset[0].Email,
-            }, (err, result) => {
-                if (result.success) {
+            const userCreationOnBrainTree = await new Promise((resolve, reject) => {
+                gateway.customer.create({
+                    id: userDataFromUsers.recordset[0].UserGUID,
+                    firstName: userDataFromUsers.recordset[0].FirstName,
+                    company: userDataFromUsers.recordset[0].CompanyId,
+                    email: userDataFromUsers.recordset[0].Email,
+                }).then(response => {
+                    resolve(response);
+                }).catch(err => {
+                    console.log(err);
+                    reject(err);
+                });
+            });
+            let resultFromBrainTreeUserCreationMethod = await userCreationOnBrainTree;
+            if(resultFromBrainTreeUserCreationMethod.success)
+            {
+                const token = await new Promise((resolve, reject) => {
                     gateway.clientToken.generate({
                         customerId: userGuid
-                    }, (err, response) => {
-                        const clientToken = response.clientToken
-                        return { clientToken };
+                    }).then(response => {
+                        resolve(response);
+                    }).catch(err => {
+                        console.log(err);
+                        reject(err);
                     });
-                }
-            });
+                });
+                return token;
+            }
+            else{
+                return {"Error Message":"Cannot create user on BrainTree"}
+            }
         }
         else {
             return { "ErrorMessage": "No user regitsered against given guid" };
