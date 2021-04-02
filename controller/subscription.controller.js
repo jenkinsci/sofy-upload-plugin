@@ -79,8 +79,9 @@ const CancelSubscription = async (userGuid) =>
         .query('select subscriptionBTID from subscriptionsBTpayments where BTCustomerID = @userGuid and SubscriptionBTStatus = \'ACTIVE\'');
         if(currentSubscriptionID.lenght != 0)
         {
+            var subscriptionIDFromDB = currentSubscriptionID.recordset[0].subscriptionBTID;
             const subscriptionCancelStatus = await new Promise((resolve, reject) => {
-                gateway.subscription.cancel(currentSubscriptionID.recordset[0].SubscriptionBTID).then(response => {
+                gateway.subscription.cancel(subscriptionIDFromDB).then(response => {
                     resolve(response);
                 }).catch(err => {
                     console.log(err);
@@ -90,8 +91,8 @@ const CancelSubscription = async (userGuid) =>
             if(subscriptionCancelStatus.success)
             {
                 await poolPromise.request()
-                .input('subscriptionID', currentSubscriptionID.recordset[0].SubscriptionBTID)
-                .query('update subscriptionsBTpayments set SubscriptionBTStatus = \'CANCELLED\' where SubscriptionBTID = @subscriptionID')
+                .input('subscriptionID', subscriptionIDFromDB)
+                .query('update subscriptionsBTpayments set SubscriptionBTStatus = \'CANCELLED\' where SubscriptionBTID = @subscriptionID and SubscriptionBTStatus = \'ACTIVE\'')
                 return {"Message" : "Subscription Successfully Cancelled", "StatusCode":"200"}
             }
             else{
