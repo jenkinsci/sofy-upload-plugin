@@ -18,7 +18,7 @@ const routes = require('./routes');
   app.use(cors());
   app.use(routes);
 
-  app.use((err, req, res) => {
+  app.use((err, req, res, next) => {
     console.error(err);
     const { message, stack } = err;
     res.status(500).json({
