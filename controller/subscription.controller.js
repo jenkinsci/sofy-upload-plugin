@@ -1,6 +1,7 @@
 const sql = require("mssql");
 const { poolPromise } = require("../config/db")
 const braintree = require("braintree");
+const date = require ('date-and-time');
 
 const gateway = new braintree.BraintreeGateway({
     environment: braintree.Environment.Sandbox,
@@ -86,9 +87,12 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
         const userDataFromBrainTreeTable = await poolPromise.request()
             .input('userGuid', user_guid)
             .query('select * from SubscriptionsBTPayments where BTCustomerID = @userGuid order by SubscriptionBTDetailsID desc');
-        if (userDataFromBrainTreeTable.recordSet.length == 0) {
-            var subscriptionCreationObject = gateway.subscription.Create({
-                    paymentMethodToken: paymentMethodNonce,
+        var currentdate = new Date();
+        currentdate = date.format(currentdate, 'YYYY/MM/DD')
+        if (userDataFromBrainTreeTable.recordset.length == 0) {
+            const subscriptionCreationObject = await new Promise((resolve, reject) => {
+                gateway.subscription.create({
+                    paymentMethodNonce: paymentMethodNonce,
                     planId: planId
                 }).then(response => {
                     resolve(response);
@@ -96,27 +100,22 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                     console.log(err);
                     reject(err);
                 }); 
+            });
             if(subscriptionCreationObject.success)
             {
-                var billingPeriodEndDate = subscriptionCreationObject.billingPeriodEndDate;
-                var billingPeriodStartDate = subscriptionCreationObject.billingPeriodStartDate;
-                var firstBillingDate = subscriptionCreationObject.firstBillingDate;
-                var billingDayOfMonth = subscriptionCreationObject.billingDayOfMonth;
-                var planBTreeCode = subscriptionCreationObject.planId;
-                var userEmail = subscriptionCreationObject.transactions[0].customer.email;
-                var currentdate = new Date(); 
-                var datetime = currentdate.getDate() + "/"
-                    + (currentdate.getMonth()+1)  + "/" 
-                    + currentdate.getFullYear() + " @ "  
-                    + currentdate.getHours() + ":"  
-                    + currentdate.getMinutes() + ":" 
-                    + currentdate.getSeconds();   
-                    let spCreateSubscriptionResult = await poolPromise.request()
+                var billingPeriodEndDate = subscriptionCreationObject.subscription.billingPeriodEndDate;
+                var subscriptionBTID = subscriptionCreationObject.subscription.id;
+                var billingPeriodStartDate = subscriptionCreationObject.subscription.billingPeriodStartDate;
+                var firstBillingDate = subscriptionCreationObject.subscription.firstBillingDate;
+                var billingDayOfMonth = subscriptionCreationObject.subscription.billingDayOfMonth;
+                var planBTreeCode = subscriptionCreationObject.subscription.planId;
+                var userEmail = subscriptionCreationObject.subscription.transactions[0].customer.email;
+                let spCreateSubscriptionResult = await poolPromise.request()
                     .input('emailID', sql.VarChar(50), userEmail)
                     .input('SubscriptionBTID', sql.VarChar(50), subscriptionBTID)
                     .input('SubscriptionBTStatus', sql.VarChar(10), 'ACTIVE')
                     .input('SubscriptionBTPlanID', sql.VarChar(50), planBTreeCode)
-                    .input('SubscriptionBTCreatedDatetime', sql.DateTime, datetime)
+                    .input('SubscriptionBTCreatedDatetime', sql.DateTime, currentdate)
                     .input('BillingDayofmonth', sql.BigInt, billingDayOfMonth)
                     .input('BillingPeriodEndDate', sql.DateTime, billingPeriodEndDate)
                     .input('BillingPeriodStartDate', sql.DateTime, billingPeriodStartDate)
@@ -132,7 +131,7 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                         "message" : "Subscription Successful!",
                         "status" : true,
                         "planID" :  planBTreeCode,
-                        "nextBillingDate" : subscriptionCreationObject.nextBillingDate
+                        "nextBillingDate" : subscriptionCreationObject.subscription.nextBillingDate
                     }, "StatusCode": "200" }
                 }
                 else
@@ -151,7 +150,8 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
             }
         }
         else{
-            var userSubscriptionsID = userDataFromBrainTreeTable.recordset[0].subscriptionBTID;
+            var paidThroughDateFromBTData = date.format(userDataFromBrainTreeTable.recordset[0].PaidThroughDate, 'YYYY/MM/DD')
+            var userSubscriptionsID = userDataFromBrainTreeTable.recordset[0].SubscriptionBTID;
             const subscriptionCancelStatus = await new Promise((resolve, reject) => {
                 gateway.subscription.cancel(userSubscriptionsID).then(response => {
                     resolve(response);
@@ -160,7 +160,7 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                     reject(err);
                 });
             });
-            if(subscriptionCancelStatus.Errors == null || subscriptionCancelStatus.Message == 'Subscription has already been canceled.' )
+            if(subscriptionCancelStatus.errors == null || subscriptionCancelStatus.message == 'Subscription has already been canceled.' )
             {
                 if(userDataFromBrainTreeTable.recordset[0].SubscriptionBTPlanID == planId)
                 {
@@ -174,32 +174,36 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                     .input('planOne', planId)
                     .input('planTwo', userDataFromBrainTreeTable.recordset[0].SubscriptionBTPlanID)
                     .query('select * from plansv2 where BTreeCode in (@planOne, @planTwo) order by PlanID asc');
-                    if (twoPlans[1].BTreeCode == planID || (userDataFromBrainTreeTable[0].PaidThroughDate < DateTimeNow()))
+                    if (twoPlans.recordset[1].BTreeCode == planId || (paidThroughDateFromBTData < currentdate))
                     {
-                        var subscriptionCreationObject = gateway.subscription.Create({
-                            paymentMethodToken: paymentMethodNonce,
-                            planId: planId
-                        }).then(response => {
-                            resolve(response);
-                        }).catch(err => {
-                            console.log(err);
-                            reject(err);
-                        }); 
+                        const subscriptionCreationObject = await new Promise((resolve, reject) => {
+                            gateway.subscription.create({
+                                paymentMethodNonce: paymentMethodNonce,
+                                planId: planId
+                            }).then(response => {
+                                resolve(response);
+                            }).catch(err => {
+                                console.log(err);
+                                reject(err);
+                            }); 
+                        });
                         if(subscriptionCreationObject.success)
                         {
-                            var billingPeriodEndDate = subscriptionCreationObject.billingPeriodEndDate;
-                            var billingPeriodStartDate = subscriptionCreationObject.billingPeriodStartDate;
-                            var firstBillingDate = subscriptionCreationObject.firstBillingDate;
-                            var billingDayOfMonth = subscriptionCreationObject.billingDayOfMonth;
-                            var planBTreeCode = subscriptionCreationObject.planId;
-                            var userEmail = subscriptionCreationObject.transactions[0].customer.email;
-                            var currentdate = new Date();   
+                            var billingPeriodEndDate = subscriptionCreationObject.subscription.billingPeriodEndDate;
+                            var subscriptionBTID = subscriptionCreationObject.subscription.id;
+                            var billingPeriodStartDate = subscriptionCreationObject.subscription.billingPeriodStartDate;
+                            var firstBillingDate = subscriptionCreationObject.subscription.firstBillingDate;
+                            var billingDayOfMonth = subscriptionCreationObject.subscription.billingDayOfMonth;
+                            var planBTreeCode = subscriptionCreationObject.subscription.planId;
+                            var userEmail = subscriptionCreationObject.subscription.transactions[0].customer.email;
+                            var currentdate = new Date();
+                            currentdate = date.format(currentdate, 'YYYY/MM/DD HH:mm:ss')
                             let spCreateSubscriptionResult = await poolPromise.request()
                             .input('emailID', sql.VarChar(50), userEmail)
                             .input('SubscriptionBTID', sql.VarChar(50), subscriptionBTID)
                             .input('SubscriptionBTStatus', sql.VarChar(10), 'ACTIVE')
                             .input('SubscriptionBTPlanID', sql.VarChar(50), planBTreeCode)
-                            .input('SubscriptionBTCreatedDatetime', sql.DateTime, DateTimeNow())
+                            .input('SubscriptionBTCreatedDatetime', sql.DateTime, currentdate)
                             .input('BillingDayofmonth', sql.BigInt, billingDayOfMonth)
                             .input('BillingPeriodEndDate', sql.DateTime, billingPeriodEndDate)
                             .input('BillingPeriodStartDate', sql.DateTime, billingPeriodStartDate)
@@ -223,26 +227,63 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                                 return { "Message": {
                                     "message" : "Subscription Successful But Error in Information Saving!",
                                     "status" : false
-                                }, "StatusCode": "200" }
+                                }, "StatusCode": "502" }
                             }
                         }
                         else
                         {
                             return { "Message": {
-                                "message" : spCreateSubscriptionResult.Message,
+                                "message" : subscriptionCreationObject.message,
                                 "status" : false
-                            }, "StatusCode": "200" }
+                            }, "StatusCode": "502" }
                         }
                     }
                     else{
-                        console.log('Inside Future Transaction Block')   
+                        paidThroughDateFromBTData = date.parse(paidThroughDateFromBTData, 'YYYY/MM/DD');
+                        currentdate = date.parse(currentdate, 'YYYY/MM/DD');
+                        var dayDiff = date.subtract(paidThroughDateFromBTData, currentdate).toDays();
+                        var futureDate = date.addDays(currentdate, dayDiff);
+                        const subscriptionCreationObject = await new Promise((resolve, reject) => {
+                            gateway.subscription.create({
+                                paymentMethodNonce: paymentMethodNonce,
+                                planId: planId,
+                                firstBillingDate: futureDate
+                            }).then(response => {
+                                resolve(response);
+                            }).catch(err => {
+                                console.log(err);
+                                reject(err);
+                            }); 
+                        });
+                        if(subscriptionCreationObject.success)
+                        {
+                            return { "Message": {
+                                "message" : "Subscription Successful! This will be activated on next billing date",
+                                "status" : true,
+                                "planID" :  planId,
+                                "nextBillingDate" : date.addDays(paidThroughDateFromBTData, 1)
+                            }, "StatusCode": "200" }
+                        }
+                        else{
+                            return { "Message": {
+                                "message" : subscriptionCreationObject.message,
+                                "status" : false
+                            }, "StatusCode": "502" }
+                        }
                     }
                 }
+            }
+            else
+            {
+                return { "Message": {
+                    "message" : subscriptionCancelStatus,
+                    "status" : false
+                }, "StatusCode": "502" }
             }
         }
     } catch (error) {
         console.log(error);
-        return { "Message": error, "StatusCode": "404" };
+        return { "Message": error, "StatusCode": "500" };
     }
 }
 
