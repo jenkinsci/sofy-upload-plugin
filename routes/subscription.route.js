@@ -10,7 +10,7 @@ router.get("/getClientToken/:userGuid", async (req, res) => {
     const token = await BTTokenGeneration(userGuid);
     res.json(token);
   } catch (error) {
-    console.log(error);
+    return { "Message": error, "StatusCode": "500" };
   }
 });
 
@@ -22,7 +22,7 @@ router.post("/createSubscription", async (req, res) => {
       var status = await CreateSubscription(paymentMethodNonce, planId, user_guid);
       res.status(status.StatusCode).json(status);
     } catch (error) {
-      console.log(error);
+        return { "Message": error, "StatusCode": "500" };
     }
   });
 
@@ -32,7 +32,7 @@ router.post("/cancelSubscription/:userGuid", async (req, res) => {
       var status = await CancelSubscription(userGuid);
       res.status(status.StatusCode).json(status);
     } catch (error) {
-      console.log(error);
+        return { "Message": error, "StatusCode": "500" };
     }
   });
 
@@ -43,7 +43,7 @@ router.post("/cancelSubscription/:userGuid", async (req, res) => {
       var status = await BrainTreeWebHookHandler(bt_signature, bt_payload);
       res.status(status.StatusCode).json(status);
     } catch (error) {
-      console.log(error);
+        return { "Message": error, "StatusCode": "500" };
     }
   });
   

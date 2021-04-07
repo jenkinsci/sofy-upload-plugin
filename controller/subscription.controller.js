@@ -10,16 +10,6 @@ const gateway = new braintree.BraintreeGateway({
     privateKey: "a7237c4a19e98d43565a72e25d68c358"
 });
 
-const DateTimeNow = () =>
-{
-    var datetime = currentdate.getDate() + "/"
-    + (currentdate.getMonth()+1)  + "/" 
-    + currentdate.getFullYear() + " @ "  
-    + currentdate.getHours() + ":"  
-    + currentdate.getMinutes() + ":" 
-    + currentdate.getSeconds();  
-    return datetime;
-}
 
 const BTTokenGeneration = async (userGuid) => {
     console.log(userGuid);
