@@ -1,10 +1,10 @@
-const router = require("express").Router();
+const router = require('express').Router();
 
 const {
   auth: { login },
-} = require("../controller");
+} = require('../controller');
 
-router.get("login", async (req, res) => {
+router.get('login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await login(email, password);
@@ -15,7 +15,7 @@ router.get("login", async (req, res) => {
 });
 
 // Register a new user
-router.post("/register", function (req, res) {
+router.post('/register', (req, res) => {
   // const saltHash = utils.genPassword(req.body.password);
   // const salt = saltHash.salt;
   // const hash = saltHash.hash;

@@ -65,7 +65,7 @@ const updateRelease = async (
 ) => {
   const targetRelease = await getReleaseById(releaseId);
   if (!targetRelease) {
-    throw Error('Release doesn\'t exist against this ID');
+    throw createError(400, 'Release doesn\'t exist against this ID');
   }
 
   const { ApplicationId } = targetRelease;

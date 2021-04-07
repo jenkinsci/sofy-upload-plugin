@@ -1,4 +1,4 @@
-module.exports = ({ body: bodySchema, paramSchema, querySchema }) => (
+module.exports = ({ body: bodySchema, params: paramSchema, query: querySchema }) => (
   req,
   res,
   next,
