@@ -20,11 +20,8 @@ const routes = require('./routes');
 
   app.use((err, req, res, next) => {
     console.error(err);
-    const { message, stack } = err;
-    res.status(500).json({
-      message: 'Something went wrong!',
-      error: message,
-      stack,
+    res.status(err.statusCode || 500).json({
+      message: err.message || 'Something went wrong!',
     });
   });
 
