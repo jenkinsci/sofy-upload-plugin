@@ -9,6 +9,8 @@
     "date-and-time": "^1.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "http-errors": "^1.8.0",
+    "joi": "^17.4.0",
     "mssql": "^6.3.1",
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0"
@@ -21,5 +23,10 @@
     "url": "https://quantyzd.visualstudio.com/SOFY3.0/_git/sofy-node-backend"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
 }

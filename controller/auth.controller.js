@@ -2,10 +2,12 @@ const sql = require("mssql");
 const {poolPromise} = require("../config/db")
 const utils = require("../lib/utils");
 
+const { db } = require("../config/db");
+
 const login = async (email, password) => {
   const {
-    recordset
-  } = await poolPromise.request().input('email', email).query('select * from Users where Email = @email');
+    recordset,
+  } = await db.request().input('email', sql.VarChar, email).query(`select * from users where Email = @email`);
 
   if (!recordset.length) {
     throw Error("User not found");

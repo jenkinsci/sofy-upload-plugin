@@ -1,5 +1,9 @@
+const auth = require('./auth.controller');
+const deviceGroup = require('./device-group.controller');
+const release = require('./release.controller');
+
 module.exports = {
-  auth: require("./auth.controller"),
-  deviceGroup: require("./device-group.controller"),
-  subscription: require("./subscription.controller"),
+  auth,
+  deviceGroup,
+  release,
 };
