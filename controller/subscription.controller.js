@@ -1,5 +1,5 @@
 const sql = require("mssql");
-const { poolPromise } = require("../config/db")
+const { db } = require("../config/db")
 const braintree = require("braintree");
 const date = require ('date-and-time');
 
@@ -13,12 +13,12 @@ const gateway = new braintree.BraintreeGateway({
 
 const BTTokenGeneration = async (userGuid) => {
     console.log(userGuid);
-    const userDataFromUserBrainTreeDetails = await poolPromise.request()
+    const userDataFromUserBrainTreeDetails = await db.request()
         .input('userGuid', userGuid)
         .query('select * from SubscriptionsBTPayments where BTCustomerID = @userGuid');
     console.log(userDataFromUserBrainTreeDetails.recordset.length);
     if (userDataFromUserBrainTreeDetails.recordset.length == 0) {
-        const userDataFromUsers = await poolPromise.request()
+        const userDataFromUsers = await db.request()
             .input('userGuid', userGuid)
             .query('Select * from Users where UserGUID = @userGuid');
         if (userDataFromUsers.lenght != 0) {
@@ -74,7 +74,7 @@ const BTTokenGeneration = async (userGuid) => {
 
 const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
     try {
-        const userDataFromBrainTreeTable = await poolPromise.request()
+        const userDataFromBrainTreeTable = await db.request()
             .input('userGuid', user_guid)
             .query('select * from SubscriptionsBTPayments where BTCustomerID = @userGuid order by SubscriptionBTDetailsID desc');
         var currentdate = new Date();
@@ -100,7 +100,7 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                 var billingDayOfMonth = subscriptionCreationObject.subscription.billingDayOfMonth;
                 var planBTreeCode = subscriptionCreationObject.subscription.planId;
                 var userEmail = subscriptionCreationObject.subscription.transactions[0].customer.email;
-                let spCreateSubscriptionResult = await poolPromise.request()
+                let spCreateSubscriptionResult = await db.request()
                     .input('emailID', sql.VarChar(50), userEmail)
                     .input('SubscriptionBTID', sql.VarChar(50), subscriptionBTID)
                     .input('SubscriptionBTStatus', sql.VarChar(10), 'ACTIVE')
@@ -160,7 +160,7 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                     }, "StatusCode": "200" }
                 }
                 else{
-                    const twoPlans = await poolPromise.request()
+                    const twoPlans = await db.request()
                     .input('planOne', planId)
                     .input('planTwo', userDataFromBrainTreeTable.recordset[0].SubscriptionBTPlanID)
                     .query('select * from plansv2 where BTreeCode in (@planOne, @planTwo) order by PlanID asc');
@@ -188,7 +188,7 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
                             var userEmail = subscriptionCreationObject.subscription.transactions[0].customer.email;
                             var currentdate = new Date();
                             currentdate = date.format(currentdate, 'YYYY/MM/DD HH:mm:ss')
-                            let spCreateSubscriptionResult = await poolPromise.request()
+                            let spCreateSubscriptionResult = await db.request()
                             .input('emailID', sql.VarChar(50), userEmail)
                             .input('SubscriptionBTID', sql.VarChar(50), subscriptionBTID)
                             .input('SubscriptionBTStatus', sql.VarChar(10), 'ACTIVE')
@@ -279,7 +279,7 @@ const CreateSubscription = async (paymentMethodNonce, planId, user_guid) => {
 
 const CancelSubscription = async (userGuid) => {
     try {
-        const currentSubscriptionID = await poolPromise.request()
+        const currentSubscriptionID = await db.request()
             .input('userGuid', userGuid)
             .query('select subscriptionBTID from subscriptionsBTpayments where BTCustomerID = @userGuid and SubscriptionBTStatus = \'ACTIVE\'');
         if (currentSubscriptionID.lenght != 0) {
@@ -337,7 +337,7 @@ const BrainTreeWebHookHandler = async (bt_signature, bt_payload) => {
                 + currentdate.getHours() + ":"  
                 + currentdate.getMinutes() + ":" 
                 + currentdate.getSeconds();
-            let spCreateSubscriptionResult = await poolPromise.request()
+            let spCreateSubscriptionResult = await db.request()
             .input('emailID', sql.VarChar(50), userEmail)
             .input('SubscriptionBTID', sql.VarChar(50), subscriptionBTID)
             .input('SubscriptionBTStatus', sql.VarChar(10), 'ACTIVE')
@@ -361,7 +361,7 @@ const BrainTreeWebHookHandler = async (bt_signature, bt_payload) => {
             }
         }
         else if (notificationType == "subscription_canceled") {
-            const cancelSubscriptionInDB = await poolPromise.request()
+            const cancelSubscriptionInDB = await db.request()
                 .input('subscriptionID', subscriptionBTID)
                 .query('update subscriptionsBTpayments set SubscriptionBTStatus = \'CANCELLED\' where subscriptionBTID = @subscriptionID and SubscriptionBTStatus = \'ACTIVE\'');
                 console.log(cancelSubscriptionInDB);
