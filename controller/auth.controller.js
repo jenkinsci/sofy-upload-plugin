@@ -1,5 +1,4 @@
 const sql = require("mssql");
-const {poolPromise} = require("../config/db")
 const utils = require("../lib/utils");
 
 const { db } = require("../config/db");
@@ -13,13 +12,8 @@ const login = async (email, password) => {
     throw Error("User not found");
   }
 
-  console.log(recordset);
 
-  let user = recordset[0];
-
-  console.log(user.password)
-  console.log(password)
-
+  let user = recordset[0]
   const isValid = user.Password === password;
 
   // const isValid = utils.validPassword(
