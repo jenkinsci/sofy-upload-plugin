@@ -1,19 +1,18 @@
-const sql = require("mssql");
-const utils = require("../lib/utils");
+const sql = require('mssql');
+const utils = require('../lib/utils');
 
-const { db } = require("../config/db");
+const { db } = require('../config/db');
 
 const login = async (email, password) => {
   const {
     recordset,
-  } = await db.request().input('email', sql.VarChar, email).query(`select * from users where Email = @email`);
+  } = await db.request().input('email', sql.VarChar, email).query('select * from users where Email = @email');
 
   if (!recordset.length) {
-    throw Error("User not found");
+    throw Error('User not found');
   }
 
-
-  let user = recordset[0]
+  const user = recordset[0];
   const isValid = user.Password === password;
 
   // const isValid = utils.validPassword(
@@ -23,7 +22,7 @@ const login = async (email, password) => {
   // );
 
   if (!isValid) {
-    throw Error("Invalid credentials");
+    throw Error('Invalid credentials');
   }
 
   const { token } = utils.issueJWT({

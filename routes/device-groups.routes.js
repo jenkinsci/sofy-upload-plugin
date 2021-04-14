@@ -1,9 +1,9 @@
-const router = require("express").Router();
+const router = require('express').Router();
 const {
   deviceGroup: { getDeviceGroupsList },
-} = require("../controller");
+} = require('../controller');
 
-router.get("/", async (req, res, next) => {
+router.get('/', async (req, res, next) => {
   try {
     const deviceGroups = await getDeviceGroupsList();
     res.json(deviceGroups);
