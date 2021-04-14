@@ -1,25 +1,26 @@
 const createError = require('http-errors');
 const { db } = require('../config/db');
 
-const getReleasesList = async (applicationId, lastReleaseId, rows = 10) => {
-  let pageQuery = '';
-  if (lastReleaseId) {
-    pageQuery += `AND ReleaseModelId < ${lastReleaseId}`;
-  }
+const { Release } = require('../models');
 
-  const {
-    recordset: releases,
-  } = await db.request()
-    .input('applicationId', applicationId)
-    .query(`
-      SELECT TOP(${rows})* from ReleaseModel 
-      WHERE 
-        ApplicationId = @applicationId 
-        ${pageQuery}
-      ORDER BY ReleaseModelId DESC
-    `);
+const getReleasesList = async (applicationId, page = 1, limit = 10) => {
+  const releases = await Release.findAll({
+    where: { applicationId },
+    order: [['releaseId', 'DESC']],
+    limit,
+    offset: (page - 1) * limit,
+  });
 
   return releases;
+};
+
+const createRelease = async (applicationId, {
+  name, description, startDate, endDate,
+}) => {
+  const release = await Release.create({
+    name, description, startDate, endDate,
+  });
+  return release;
 };
 
 const isOverlapping = async (appId, startDate, endDate, ignoreReleaseId) => {
@@ -102,4 +103,4 @@ const updateRelease = async (
   return getReleaseById(releaseId);
 };
 
-module.exports = { getReleasesList, updateRelease };
+module.exports = { getReleasesList, updateRelease, createRelease };
