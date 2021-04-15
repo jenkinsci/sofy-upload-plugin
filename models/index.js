@@ -30,6 +30,10 @@ const {
   VerificationCode,
 } = require('./VerificationCode.model');
 
+const {
+  UserMarketing,
+} = require('./UserMarketing.model');
+
 const associateAll = () => {
   associateRelease();
   associateApplication();
@@ -57,5 +61,6 @@ module.exports = {
   UserRole,
   TeamRole,
   VerificationCode,
+  UserMarketing,
   associateAll,
 };
