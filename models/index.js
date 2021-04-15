@@ -14,6 +14,22 @@ const {
   associate: associatePlatform,
 } = require('./Platform.model');
 
+const {
+  Company,
+} = require('./Company.model');
+
+const {
+  UserRole,
+} = require('./UserRole.model');
+
+const {
+  TeamRole,
+} = require('./TeamRole.model');
+
+const {
+  VerificationCode,
+} = require('./VerificationCode.model');
+
 const associateAll = () => {
   associateRelease();
   associateApplication();
@@ -24,7 +40,6 @@ const associateAll = () => {
 //   debugger;
 //   try {
 //     associateAll();
-//     // await syncAll({ alter: true });
 //     await sequelize.sync({ });
 //     await sequelize.sync({ alter: true });
 //     await sequelize.sync({ force: true });
@@ -38,5 +53,9 @@ module.exports = {
   Application,
   Release,
   Platform,
+  Company,
+  UserRole,
+  TeamRole,
+  VerificationCode,
   associateAll,
 };
