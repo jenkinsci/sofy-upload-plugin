@@ -8,21 +8,26 @@ const UserMarketing = sequelize.define('UserMarketing', {
     autoIncrement: true,
   },
   utm_source: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING(20),
   },
   utm_medium: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING(20),
   },
   utm_campaign: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING(100),
   },
   gclid: {
-    type: DataTypes.STRING(30),
+    type: DataTypes.STRING(100),
   },
 });
 
 const associate = () => {
-
+  UserMarketing.belongsTo(sequelize.models.User, {
+    foreignKey: {
+      name: 'userId',
+      allowNull: false,
+    },
+  })
 };
 
 module.exports = {

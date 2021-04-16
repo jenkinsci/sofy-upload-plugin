@@ -1,31 +1,33 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/sequelize');
 
-const TeamRole = sequelize.define('TeamRole', {
-  teamRoleId: {
+const AuthenticationAuthority = sequelize.define('AuthenticationAuthority', {
+  authenticationAuthorityId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },
-  type: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  code: {
+  description: {
     type: DataTypes.STRING,
-    allowNull: false,
+  },
+  redirectUrl: {
+    type: DataTypes.STRING,
   },
 });
 
 const associate = () => {
-  TeamRole.hasMany(sequelize.models.User, {
+  AuthenticationAuthority.hasMany(sequelize.models.User, {
     foreignKey: {
-      name: 'teamRoleId'
+      name: 'authenticationAuthorityId'
     },
   });
 };
 
 module.exports = {
-  TeamRole,
+  AuthenticationAuthority,
   associate,
 };

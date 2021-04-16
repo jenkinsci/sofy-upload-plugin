@@ -13,6 +13,15 @@ const Company = sequelize.define('Company', {
   },
 });
 
+const associate = () => {
+  Company.hasMany(sequelize.models.User, {
+    foreignKey: {
+      name: 'companyId'
+    },
+  });
+};
+
 module.exports = {
   Company,
+  associate,
 };

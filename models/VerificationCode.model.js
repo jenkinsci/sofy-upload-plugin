@@ -1,4 +1,3 @@
-const { UUIDV4 } = require('sequelize');
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/sequelize');
 
@@ -15,6 +14,16 @@ const VerificationCode = sequelize.define('VerificationCode', {
   },
 });
 
+const associate = () => {
+  VerificationCode.belongsTo(sequelize.models.User, {
+    foreignKey: {
+      name: 'userId',
+      allowNull: false,
+    },
+  });
+};
+
 module.exports = {
   VerificationCode,
+  associate,
 };

@@ -16,25 +16,47 @@ const {
 
 const {
   Company,
+  associate: associateCompany,
 } = require('./Company.model');
 
 const {
   UserRole,
+  associate: associateUserRole,
 } = require('./UserRole.model');
 
 const {
   TeamRole,
+  associate: associateTeamRole,
 } = require('./TeamRole.model');
 
 const {
   VerificationCode,
+  associate: associateVerificationCode,
 } = require('./VerificationCode.model');
 
 const {
   UserMarketing,
+  associate: associateMarketing,
 } = require('./UserMarketing.model');
 
+const {
+  User,
+  associate: associateUser,
+} = require('./User.model');
+
+const {
+  AuthenticationAuthority,
+  associate: associateAuthenticationAuthority,
+} = require('./AuthenticationAuthority.model');
+
 const associateAll = () => {
+  associateMarketing();
+  associateCompany();
+  associateTeamRole();
+  associateUserRole();
+  associateVerificationCode();
+  associateUser();
+  associateAuthenticationAuthority();
   associateRelease();
   associateApplication();
   associatePlatform();
@@ -44,9 +66,9 @@ const associateAll = () => {
 //   debugger;
 //   try {
 //     associateAll();
-//     await sequelize.sync({ });
-//     await sequelize.sync({ alter: true });
+//     // await sequelize.sync({ });
 //     await sequelize.sync({ force: true });
+//     // await sequelize.sync({ force: true });
 //     debugger;
 //   } catch (error) {
 //     debugger;
@@ -54,6 +76,8 @@ const associateAll = () => {
 // }, 2000);
 
 module.exports = {
+  AuthenticationAuthority,
+  User,
   Application,
   Release,
   Platform,

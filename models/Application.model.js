@@ -18,8 +18,17 @@ const Application = sequelize.define('Application', {
 });
 
 const associate = () => {
+  Application.belongsTo(sequelize.models.User, {
+    foreignKey: {
+      name: 'userId',
+      allowNull: false,
+    },
+  });
   Application.hasMany(sequelize.models.Release, {
-    foreignKey: 'applicationId',
+    foreignKey: {
+      name: 'applicationId',
+      allowNull: false,
+    },
   });
   Application.belongsTo(sequelize.models.Platform, {
     foreignKey: {
