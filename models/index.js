@@ -1,65 +1,42 @@
-const { sequelize } = require('../config/sequelize');
 const {
   Application,
   associate: associateApplication,
-} = require('./Application.model');
-
-const {
-  Release,
-  associate: associateRelease,
-} = require('./Release.model');
-
-const {
-  Platform,
-  associate: associatePlatform,
-} = require('./Platform.model');
-
-const {
-  Company,
-  associate: associateCompany,
-} = require('./Company.model');
-
-const {
-  UserRole,
-  associate: associateUserRole,
-} = require('./UserRole.model');
-
-const {
-  TeamRole,
-  associate: associateTeamRole,
-} = require('./TeamRole.model');
+} = require("./Application.model");
 
 const {
   VerificationCode,
   associate: associateVerificationCode,
-} = require('./VerificationCode.model');
+} = require("./VerificationCode.model");
 
 const {
   UserMarketing,
   associate: associateMarketing,
-} = require('./UserMarketing.model');
+} = require("./UserMarketing.model");
 
-const {
-  User,
-  associate: associateUser,
-} = require('./User.model');
+const { User, associate: associateUser } = require("./User.model");
 
 const {
   AuthenticationAuthority,
   associate: associateAuthenticationAuthority,
-} = require('./AuthenticationAuthority.model');
+} = require("./AuthenticationAuthority.model");
+
+const { Release, associate: associateRelease } = require("./Release.model");
+const { Platform, associate: associatePlatform } = require("./Platform.model");
+const { Company, associate: associateCompany } = require("./Company.model");
+const { UserRole, associate: associateUserRole } = require("./UserRole.model");
+const { TeamRole, associate: associateTeamRole } = require("./TeamRole.model");
 
 const associateAll = () => {
-  associateMarketing();
+  associateUser();
   associateCompany();
+  associateRelease();
   associateTeamRole();
   associateUserRole();
-  associateVerificationCode();
-  associateUser();
-  associateAuthenticationAuthority();
-  associateRelease();
-  associateApplication();
   associatePlatform();
+  associateMarketing();
+  associateApplication();
+  associateVerificationCode();
+  associateAuthenticationAuthority();
 };
 
 // setTimeout(async () => {
@@ -76,15 +53,15 @@ const associateAll = () => {
 // }, 2000);
 
 module.exports = {
-  AuthenticationAuthority,
   User,
-  Application,
   Release,
-  Platform,
   Company,
+  Platform,
   UserRole,
   TeamRole,
-  VerificationCode,
-  UserMarketing,
+  Application,
   associateAll,
+  UserMarketing,
+  VerificationCode,
+  AuthenticationAuthority,
 };

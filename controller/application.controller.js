@@ -1,8 +1,6 @@
-const { Application } = require('../models');
+const { Application } = require("../models");
 
-const createApplication = async ({
-  packageName,
-}) => {
+const createApplication = async ({ packageName }) => {
   const app = await Application.create({
     packageName,
   });
