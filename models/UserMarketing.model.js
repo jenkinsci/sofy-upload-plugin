@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/sequelize');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/sequelize");
 
-const UserMarketing = sequelize.define('UserMarketing', {
+const UserMarketing = sequelize.define("UserMarketing", {
   userMarketingId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -23,11 +23,9 @@ const UserMarketing = sequelize.define('UserMarketing', {
 
 const associate = () => {
   UserMarketing.belongsTo(sequelize.models.User, {
-    foreignKey: {
-      name: 'userId',
-      allowNull: false,
-    },
-  })
+    onDelete: "NO ACTION",
+    foreignKey: { name: "userId", allowNull: false },
+  });
 };
 
 module.exports = {

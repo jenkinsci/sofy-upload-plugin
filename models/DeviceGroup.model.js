@@ -1,32 +1,26 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../config/sequelize");
 
-const TeamRole = sequelize.define("TeamRole", {
-  teamRoleId: {
+const DeviceGroup = sequelize.define("DeviceGroup", {
+  deviceGroupId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  code: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
 });
 
 const associate = () => {
-  TeamRole.hasMany(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: {
-      name: "teamRoleId",
-    },
+  DeviceGroup.belongsToMany(sequelize.models.Device, {
+    through: "DeviceGroup_Device",
+    foreignKey: "deviceGroupId",
   });
 };
 
 module.exports = {
-  TeamRole,
+  DeviceGroup,
   associate,
 };

@@ -1,14 +1,14 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/sequelize');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/sequelize");
 
-const Application = sequelize.define('Application', {
+const Application = sequelize.define("Application", {
   applicationId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },
   applicationGuid: {
-    type: 'UNIQUEIDENTIFIER',
+    type: "UNIQUEIDENTIFIER",
     defaultValue: DataTypes.UUIDV4,
   },
   packageName: {
@@ -19,22 +19,28 @@ const Application = sequelize.define('Application', {
 
 const associate = () => {
   Application.belongsTo(sequelize.models.User, {
-    foreignKey: {
-      name: 'userId',
-      allowNull: false,
-    },
+    onDelete: "NO ACTION",
+    foreignKey: { name: "userId", allowNull: false },
   });
   Application.hasMany(sequelize.models.Release, {
-    foreignKey: {
-      name: 'applicationId',
-      allowNull: false,
-    },
+    onDelete: "NO ACTION",
+    foreignKey: { name: "applicationId", allowNull: false },
   });
   Application.belongsTo(sequelize.models.Platform, {
-    foreignKey: {
-      name: 'platformId',
-      allowNull: false,
-    },
+    onDelete: "NO ACTION",
+    foreignKey: { name: "platformId", allowNull: false },
+  });
+  Application.hasMany(sequelize.models.TestData, {
+    onDelete: "NO ACTION",
+    foreignKey: { name: "applicationId" },
+  });
+  Application.hasMany(sequelize.models.LiveTestCase, {
+    onDelete: "NO ACTION",
+    foreignKey: { name: "applicationId", allowNull: false },
+  });
+  Application.hasMany(sequelize.models.AutomatedTestCase, {
+    onDelete: "NO ACTION",
+    foreignKey: { name: "applicationId", allowNull: false },
   });
 };
 

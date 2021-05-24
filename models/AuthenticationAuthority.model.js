@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/sequelize');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/sequelize");
 
-const AuthenticationAuthority = sequelize.define('AuthenticationAuthority', {
+const AuthenticationAuthority = sequelize.define("AuthenticationAuthority", {
   authenticationAuthorityId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -21,8 +21,9 @@ const AuthenticationAuthority = sequelize.define('AuthenticationAuthority', {
 
 const associate = () => {
   AuthenticationAuthority.hasMany(sequelize.models.User, {
+    onDelete: "NO ACTION",
     foreignKey: {
-      name: 'authenticationAuthorityId'
+      name: "authenticationAuthorityId",
     },
   });
 };
