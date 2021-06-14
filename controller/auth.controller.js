@@ -32,25 +32,21 @@ const login = async (email, password) => {
   return { user, token };
 };
 
-// const register = async () => {
-//   try {
-//     debugger;
-//     const user = await User.create({
-//       firstName: "Taha",
-//       lastName: "Muhammad",
-//       email: "taha@sofy.ai",
-//       password:
-//         "fb0f42dddf3c12db9ca83ac7f09ad6a1245994c839b5112698252f7f2e179df236191fd3c9231d73ae94b41cf88c6adf2b45f9e931ef1537887bfc4b4ee6b32f",
-//     });
-//     debugger;
-//   } catch (error) {
-//     debugger;
-//   }
-// };
-
-// setTimeout(() => {
-//   register();
-// }, 5000);
+const register = async () => {
+  try {
+    debugger;
+    const user = await User.create({
+      firstName: "Taha",
+      lastName: "Muhammad",
+      email: "taha@sofy.ai",
+      password:
+        "fb0f42dddf3c12db9ca83ac7f09ad6a1245994c839b5112698252f7f2e179df236191fd3c9231d73ae94b41cf88c6adf2b45f9e931ef1537887bfc4b4ee6b32f",
+    });
+    debugger;
+  } catch (error) {
+    debugger;
+  }
+};
 
 // const register = async (password) => {
 // const { salt, hash } = utils.genPassword(password);
@@ -62,5 +58,5 @@ const login = async (email, password) => {
 
 module.exports = {
   login,
-  // register,
+  register,
 };
