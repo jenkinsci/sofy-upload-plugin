@@ -1,6 +1,7 @@
-const JwtStrategy = require("passport-jwt").Strategy;
-const ExtractJwt = require("passport-jwt").ExtractJwt;
-const passport = require("passport");
+const JwtStrategy = require('passport-jwt').Strategy;
+const { ExtractJwt } = require('passport-jwt');
+const passport = require('passport');
+
 const { JWT_KEY } = process.env;
 
 const options = {
@@ -10,11 +11,11 @@ const options = {
 
 module.exports = (app) => {
   passport.use(
-    new JwtStrategy(options, function (jwt_payload, done) {
-      // console.log(jwt_payload);
+    new JwtStrategy(options, ((jwt_payload, done) =>
+    // console.log(jwt_payload);
 
-      return done(null, jwt_payload);
-    })
+      done(null, jwt_payload)
+    )),
   );
   app.use(passport.initialize());
 };

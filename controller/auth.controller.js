@@ -1,20 +1,14 @@
-const sql = require("mssql");
 const utils = require("../lib/utils");
 
-const { db } = require("../config/db");
+const { User } = require("../models");
 
 const login = async (email, password) => {
-  const {
-    recordset,
-  } = await db.request().input('email', sql.VarChar, email).query(`select * from users where Email = @email`);
-
-  if (!recordset.length) {
-    throw Error("User not found");
+  const user = await User.findOne({ where: { email } });
+  if (!user) {
+    throw Error("No user exists against this email address");
   }
 
-
-  let user = recordset[0]
-  const isValid = user.Password === password;
+  const isValid = user.password === password;
 
   // const isValid = utils.validPassword(
   //   password,
@@ -33,19 +27,34 @@ const login = async (email, password) => {
     email: user.Email,
   });
 
-  delete user.Password;
+  delete user.password;
 
   return { user, token };
 };
 
-const register = async (password) => {
-  const { salt, hash } = utils.genPassword(password);
-
-  return {
-    salt,
-    hash,
-  };
+const register = async () => {
+  try {
+    debugger;
+    const user = await User.create({
+      firstName: "Taha",
+      lastName: "Muhammad",
+      email: "taha@sofy.ai",
+      password:
+        "fb0f42dddf3c12db9ca83ac7f09ad6a1245994c839b5112698252f7f2e179df236191fd3c9231d73ae94b41cf88c6adf2b45f9e931ef1537887bfc4b4ee6b32f",
+    });
+    debugger;
+  } catch (error) {
+    debugger;
+  }
 };
+
+// const register = async (password) => {
+// const { salt, hash } = utils.genPassword(password);
+// return {
+//   salt,
+//   hash,
+// };
+//userId };
 
 module.exports = {
   login,
