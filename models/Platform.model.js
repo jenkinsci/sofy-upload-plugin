@@ -14,6 +14,7 @@ const associate = () =>
   Platform.hasMany(sequelize.models.Application, {
     onDelete: "NO ACTION",
     foreignKey: { name: "platformId", allowNull: false },
+    sourceKey: "platformId",
   });
 
 module.exports = {

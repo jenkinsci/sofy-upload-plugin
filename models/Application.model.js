@@ -21,6 +21,7 @@ const associate = () => {
   Application.belongsTo(sequelize.models.User, {
     onDelete: "NO ACTION",
     foreignKey: { name: "userId", allowNull: false },
+    targetKey: "userId",
   });
   Application.hasMany(sequelize.models.Release, {
     onDelete: "NO ACTION",
@@ -29,6 +30,7 @@ const associate = () => {
   Application.belongsTo(sequelize.models.Platform, {
     onDelete: "NO ACTION",
     foreignKey: { name: "platformId", allowNull: false },
+    targetKey: "platformId",
   });
   Application.hasMany(sequelize.models.TestData, {
     onDelete: "NO ACTION",

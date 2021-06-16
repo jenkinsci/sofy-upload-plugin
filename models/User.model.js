@@ -56,6 +56,7 @@ const associate = () => {
   User.hasMany(sequelize.models.Application, {
     onDelete: "NO ACTION",
     foreignKey: { name: "userId", allowNull: false },
+    sourceKey: "userId",
   });
   User.hasMany(sequelize.models.LiveTestCase, {
     onDelete: "NO ACTION",
