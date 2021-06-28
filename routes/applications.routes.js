@@ -1,15 +1,15 @@
-const Joi = require("joi");
-const router = require("express").Router();
+const Joi = require('joi');
+const router = require('express').Router();
 
-const { validateSchema } = require("../middlewares");
+const { validateSchema } = require('../middlewares');
 const {
   release: { getReleasesList },
-} = require("../controller");
-const { createRelease } = require("../controller/release.controller");
-const { createApplication } = require("../controller/application.controller");
+} = require('../controller');
+const { createRelease } = require('../controller/release.controller');
+const { createApplication } = require('../controller/application.controller');
 
 router.post(
-  "/",
+  '/',
   validateSchema({
     body: Joi.object({
       packageName: Joi.string().required(),
@@ -27,11 +27,11 @@ router.post(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 router
-  .route("/:applicationId/release")
+  .route('/:applicationId/release')
   .get(async (req, res, next) => {
     try {
       const { applicationId } = req.params;
@@ -40,7 +40,7 @@ router
       const releases = await getReleasesList(
         applicationId,
         lastReleaseId,
-        rows
+        rows,
       );
 
       res.json(releases);
@@ -51,7 +51,9 @@ router
   .post(async (req, res, next) => {
     try {
       const { applicationId } = req.params;
-      const { name, description, startDate, endDate } = req.body;
+      const {
+        name, description, startDate, endDate,
+      } = req.body;
 
       const releases = await createRelease(applicationId, {
         name,

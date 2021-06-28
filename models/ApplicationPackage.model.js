@@ -1,7 +1,7 @@
-const { DataTypes, STRING, INTEGER } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes, STRING, INTEGER } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const ApplicationPackage = sequelize.define("ApplicationPackage", {
+const ApplicationPackage = sequelize.define('ApplicationPackage', {
   applicationPackageId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -23,16 +23,16 @@ const ApplicationPackage = sequelize.define("ApplicationPackage", {
 
 const associate = () => {
   ApplicationPackage.belongsTo(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "createdBy", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'createdBy', allowNull: false },
   });
   ApplicationPackage.belongsTo(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "assignedTo", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'assignedTo', allowNull: false },
   });
   ApplicationPackage.belongsTo(sequelize.models.Release, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "releaseId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'releaseId', allowNull: false },
   });
 };
 

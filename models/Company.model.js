@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const Company = sequelize.define("Company", {
+const Company = sequelize.define('Company', {
   companyId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -15,9 +15,9 @@ const Company = sequelize.define("Company", {
 
 const associate = () => {
   Company.hasMany(sequelize.models.User, {
-    onDelete: "NO ACTION",
+    onDelete: 'NO ACTION',
     foreignKey: {
-      name: "companyId",
+      name: 'companyId',
     },
   });
 };

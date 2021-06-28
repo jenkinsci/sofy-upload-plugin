@@ -1,14 +1,14 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const AutomatedTestCase = sequelize.define("AutomatedTestCase", {
+const AutomatedTestCase = sequelize.define('AutomatedTestCase', {
   automatedTestCaseId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
     autoIncrement: true,
   },
   automatedTestCaseGUID: {
-    type: "UNIQUEIDENTIFIER",
+    type: 'UNIQUEIDENTIFIER',
     defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
@@ -24,16 +24,16 @@ const AutomatedTestCase = sequelize.define("AutomatedTestCase", {
 
 const associate = () => {
   AutomatedTestCase.belongsTo(sequelize.models.Application, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "applicationId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'applicationId', allowNull: false },
   });
   AutomatedTestCase.hasMany(sequelize.models.AutomatedTestRun, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "automatedTestCaseId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'automatedTestCaseId', allowNull: false },
   });
   AutomatedTestCase.belongsTo(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "createdBy", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'createdBy', allowNull: false },
   });
 };
 

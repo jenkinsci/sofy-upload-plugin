@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const AutomatedTestRun = sequelize.define("AutomatedTestRun", {
+const AutomatedTestRun = sequelize.define('AutomatedTestRun', {
   automatedTestRunId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -19,8 +19,8 @@ const AutomatedTestRun = sequelize.define("AutomatedTestRun", {
 
 const associate = () => {
   AutomatedTestRun.belongsTo(sequelize.models.AutomatedTestCase, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "automatedTestCaseId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'automatedTestCaseId', allowNull: false },
   });
 };
 

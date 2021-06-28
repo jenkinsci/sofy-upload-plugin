@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const LiveTestCase = sequelize.define("LiveTestCase", {
+const LiveTestCase = sequelize.define('LiveTestCase', {
   liveTestCaseId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -16,20 +16,20 @@ const LiveTestCase = sequelize.define("LiveTestCase", {
 
 const associate = () => {
   LiveTestCase.belongsTo(sequelize.models.Application, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "applicationId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'applicationId', allowNull: false },
   });
   LiveTestCase.belongsTo(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "createdBy", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'createdBy', allowNull: false },
   });
   LiveTestCase.belongsTo(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "assignedTo", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'assignedTo', allowNull: false },
   });
   LiveTestCase.hasMany(sequelize.models.LiveTestRun, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "liveTestCaseId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'liveTestCaseId', allowNull: false },
   });
 };
 

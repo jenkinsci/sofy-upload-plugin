@@ -1,8 +1,17 @@
 const router = require('express').Router();
 
 const {
-  auth: { login },
+  auth: { login, createSampleUser },
 } = require('../controller');
+
+router.post('create-sample', async (req, res) => {
+  try {
+    const user = await createSampleUser(req.body);
+    res.json(user);
+  } catch (error) {
+    debugger;
+  }
+});
 
 router.get('login', async (req, res) => {
   const { email, password } = req.body;

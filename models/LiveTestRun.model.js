@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const LiveTestRun = sequelize.define("LiveTestRun", {
+const LiveTestRun = sequelize.define('LiveTestRun', {
   liveTestRunId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -16,8 +16,8 @@ const LiveTestRun = sequelize.define("LiveTestRun", {
 
 const associate = () => {
   LiveTestRun.belongsTo(sequelize.models.LiveTestCase, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "liveTestCaseId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'liveTestCaseId', allowNull: false },
   });
 };
 

@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const DeviceGroup = sequelize.define("DeviceGroup", {
+const DeviceGroup = sequelize.define('DeviceGroup', {
   deviceGroupId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -15,8 +15,8 @@ const DeviceGroup = sequelize.define("DeviceGroup", {
 
 const associate = () => {
   DeviceGroup.belongsToMany(sequelize.models.Device, {
-    through: "DeviceGroup_Device",
-    foreignKey: "deviceGroupId",
+    through: 'DeviceGroup_Device',
+    foreignKey: 'deviceGroupId',
   });
 };
 

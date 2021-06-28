@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const UserRole = sequelize.define("UserRole", {
+const UserRole = sequelize.define('UserRole', {
   userRoleId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -15,8 +15,8 @@ const UserRole = sequelize.define("UserRole", {
 
 const associate = () => {
   UserRole.hasMany(sequelize.models.User, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "userRoleId" },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'userRoleId' },
   });
 };
 

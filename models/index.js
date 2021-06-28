@@ -1,65 +1,65 @@
 const {
   Application,
   associate: associateApplication,
-} = require("./Application.model");
+} = require('./Application.model');
 
 const {
   VerificationCode,
   associate: associateVerificationCode,
-} = require("./VerificationCode.model");
+} = require('./VerificationCode.model');
 
 const {
   UserMarketing,
   associate: associateMarketing,
-} = require("./UserMarketing.model");
+} = require('./UserMarketing.model');
 
-const { User, associate: associateUser } = require("./User.model");
+const { User, associate: associateUser } = require('./User.model');
 
 const {
   AuthenticationAuthority,
   associate: associateAuthenticationAuthority,
-} = require("./AuthenticationAuthority.model");
+} = require('./AuthenticationAuthority.model');
 
-const { Release, associate: associateRelease } = require("./Release.model");
-const { Platform, associate: associatePlatform } = require("./Platform.model");
-const { Company, associate: associateCompany } = require("./Company.model");
-const { UserRole, associate: associateUserRole } = require("./UserRole.model");
-const { TeamRole, associate: associateTeamRole } = require("./TeamRole.model");
-const { TestData, associate: associateTestData } = require("./TestData.model");
+const { Release, associate: associateRelease } = require('./Release.model');
+const { Platform, associate: associatePlatform } = require('./Platform.model');
+const { Company, associate: associateCompany } = require('./Company.model');
+const { UserRole, associate: associateUserRole } = require('./UserRole.model');
+const { TeamRole, associate: associateTeamRole } = require('./TeamRole.model');
+const { TestData, associate: associateTestData } = require('./TestData.model');
 const {
   LiveTestCase,
   associate: associateLiveTestCase,
-} = require("./LiveTestCase.model");
+} = require('./LiveTestCase.model');
 const {
   LiveTestRun,
   associate: associateLiveTestRun,
-} = require("./LiveTestRun.model");
+} = require('./LiveTestRun.model');
 const {
   ApplicationPackage,
   associate: associateApplicationPackage,
-} = require("./ApplicationPackage.model");
+} = require('./ApplicationPackage.model');
 const {
   AutomatedTestCase,
   associate: associateAutomatedTestCase,
-} = require("./AutomatedTestCase.model");
+} = require('./AutomatedTestCase.model');
 
 const {
   AutomatedTestRun,
   associate: associateAutomatedTestRun,
-} = require("./AutomatedTestRun.model");
+} = require('./AutomatedTestRun.model');
 
-const { Device, associate: associateDevice } = require("./Device.model");
-const { DeviceOS, associate: associateDeviceOS } = require("./DeviceOS.model");
+const { Device, associate: associateDevice } = require('./Device.model');
+const { DeviceOS, associate: associateDeviceOS } = require('./DeviceOS.model');
 const {
   DeviceType,
   associate: associateDeviceType,
-} = require("./DeviceType.model");
+} = require('./DeviceType.model');
 const {
   DeviceGroup,
   associate: associateDeviceGroup,
-} = require("./DeviceGroup.model");
+} = require('./DeviceGroup.model');
 
-const { Machine, associate: associateMachine } = require("./Machine.model");
+const { Machine, associate: associateMachine } = require('./Machine.model');
 
 const associateAll = () => {
   associateUser();
@@ -92,7 +92,7 @@ const associateAll = () => {
 
 // setTimeout(async () => {
 //   try {
-//     const { sequelize } = require("../config/sequelize");
+//     const { sequelize } = require('../config/sequelize');
 //     associateAll();
 //     // await sequelize.sync({ });
 //     await sequelize.sync({ force: true });

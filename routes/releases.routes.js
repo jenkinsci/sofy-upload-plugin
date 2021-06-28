@@ -1,13 +1,13 @@
-const router = require("express").Router();
-const Joi = require("joi");
+const router = require('express').Router();
+const Joi = require('joi');
 
-const { validateSchema } = require("../middlewares");
+const { validateSchema } = require('../middlewares');
 const {
   release: { updateRelease },
-} = require("../controller");
+} = require('../controller');
 
 router.patch(
-  "/:releaseId",
+  '/:releaseId',
   validateSchema({
     body: Joi.object({
       name: Joi.string().required(),
@@ -19,7 +19,9 @@ router.patch(
   async (req, res, next) => {
     try {
       const { releaseId } = req.params;
-      const { name, description, startDate, endDate } = req.body;
+      const {
+        name, description, startDate, endDate,
+      } = req.body;
 
       const updatedRelease = await updateRelease(releaseId, {
         name,
@@ -29,13 +31,13 @@ router.patch(
       });
 
       res.json({
-        message: "Release has been updated successfully",
+        message: 'Release has been updated successfully',
         updatedRelease,
       });
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 module.exports = router;

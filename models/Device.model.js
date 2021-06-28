@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const Device = sequelize.define("Device", {
+const Device = sequelize.define('Device', {
   deviceId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -16,22 +16,22 @@ const Device = sequelize.define("Device", {
 const associate = () => {
   Device.belongsTo(sequelize.models.DeviceOS, {
     foreignKey: {
-      onDelete: "NO ACTION",
-      name: "deviceOSId",
+      onDelete: 'NO ACTION',
+      name: 'deviceOSId',
     },
   });
   Device.belongsTo(sequelize.models.DeviceType, {
     foreignKey: {
-      onDelete: "NO ACTION",
-      name: "deviceTypeId",
+      onDelete: 'NO ACTION',
+      name: 'deviceTypeId',
     },
   });
   Device.belongsTo(sequelize.models.Machine, {
-    foreignKey: { onDelete: "NO ACTION", name: "machineId" },
+    foreignKey: { onDelete: 'NO ACTION', name: 'machineId' },
   });
   Device.belongsToMany(sequelize.models.DeviceGroup, {
-    through: "DeviceGroup_Device",
-    foreignKey: "deviceId",
+    through: 'DeviceGroup_Device',
+    foreignKey: 'deviceId',
   });
 };
 

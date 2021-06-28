@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const Release = sequelize.define("Release", {
+const Release = sequelize.define('Release', {
   releaseId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -15,12 +15,12 @@ const Release = sequelize.define("Release", {
 
 const associate = () => {
   Release.belongsTo(sequelize.models.Application, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "applicationId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'applicationId', allowNull: false },
   });
   Release.hasMany(sequelize.models.ApplicationPackage, {
-    onDelete: "NO ACTION",
-    foreignKey: { name: "releaseId", allowNull: false },
+    onDelete: 'NO ACTION',
+    foreignKey: { name: 'releaseId', allowNull: false },
   });
 };
 

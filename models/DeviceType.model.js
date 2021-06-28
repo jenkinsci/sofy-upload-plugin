@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const DeviceType = sequelize.define("DeviceType", {
+const DeviceType = sequelize.define('DeviceType', {
   deviceTypeId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -28,8 +28,8 @@ const DeviceType = sequelize.define("DeviceType", {
 const associate = () => {
   DeviceType.hasMany(sequelize.models.Device, {
     foreignKey: {
-      onDelete: "NO ACTION",
-      name: "deviceTypeId",
+      onDelete: 'NO ACTION',
+      name: 'deviceTypeId',
     },
   });
 };

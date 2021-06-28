@@ -1,11 +1,11 @@
-const utils = require("../lib/utils");
+const utils = require('../lib/utils');
 
-const { User } = require("../models");
+const { User } = require('../models');
 
 const login = async (email, password) => {
   const user = await User.findOne({ where: { email } });
   if (!user) {
-    throw Error("No user exists against this email address");
+    throw Error('No user exists against this email address');
   }
 
   const isValid = user.password === password;
@@ -17,7 +17,7 @@ const login = async (email, password) => {
   // );
 
   if (!isValid) {
-    throw Error("Invalid credentials");
+    throw Error('Invalid credentials');
   }
 
   const { token } = utils.issueJWT({
@@ -32,15 +32,17 @@ const login = async (email, password) => {
   return { user, token };
 };
 
+const createSampleUser = (data) => User.create(data);
+
 const register = async () => {
   try {
     debugger;
     const user = await User.create({
-      firstName: "Taha",
-      lastName: "Muhammad",
-      email: "taha@sofy.ai",
+      firstName: 'Taha',
+      lastName: 'Muhammad',
+      email: 'taha@sofy.ai',
       password:
-        "fb0f42dddf3c12db9ca83ac7f09ad6a1245994c839b5112698252f7f2e179df236191fd3c9231d73ae94b41cf88c6adf2b45f9e931ef1537887bfc4b4ee6b32f",
+        'fb0f42dddf3c12db9ca83ac7f09ad6a1245994c839b5112698252f7f2e179df236191fd3c9231d73ae94b41cf88c6adf2b45f9e931ef1537887bfc4b4ee6b32f',
     });
     debugger;
   } catch (error) {
@@ -54,9 +56,10 @@ const register = async () => {
 //   salt,
 //   hash,
 // };
-//userId };
+// userId };
 
 module.exports = {
   login,
   register,
+  createSampleUser,
 };

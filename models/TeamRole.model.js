@@ -1,7 +1,7 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const TeamRole = sequelize.define("TeamRole", {
+const TeamRole = sequelize.define('TeamRole', {
   teamRoleId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -19,9 +19,9 @@ const TeamRole = sequelize.define("TeamRole", {
 
 const associate = () => {
   TeamRole.hasMany(sequelize.models.User, {
-    onDelete: "NO ACTION",
+    onDelete: 'NO ACTION',
     foreignKey: {
-      name: "teamRoleId",
+      name: 'teamRoleId',
     },
   });
 };

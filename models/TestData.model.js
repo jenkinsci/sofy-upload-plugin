@@ -1,9 +1,9 @@
-const { DataTypes } = require("sequelize");
-const { sequelize } = require("../config/sequelize");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/sequelize');
 
-const { TESTDATA_KINDS } = require("../constants");
+const { TESTDATA_KINDS } = require('../constants');
 
-const TestData = sequelize.define("TestData", {
+const TestData = sequelize.define('TestData', {
   testDataId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -34,14 +34,13 @@ const TestData = sequelize.define("TestData", {
   },
 });
 
-const associate = () =>
-  TestData.belongsTo(sequelize.models.Application, {
-    onDelete: "NO ACTION",
-    foreignKey: {
-      name: "applicationId",
-      allowNull: false,
-    },
-  });
+const associate = () => TestData.belongsTo(sequelize.models.Application, {
+  onDelete: 'NO ACTION',
+  foreignKey: {
+    name: 'applicationId',
+    allowNull: false,
+  },
+});
 
 module.exports = {
   TestData,
