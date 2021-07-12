@@ -5,9 +5,9 @@ const subscription = require('./subscription.controller');
 const application = require('./application.controller');
 
 module.exports = {
-  auth,
-  deviceGroup,
-  release,
-  subscription,
-  application,
+    auth,
+    deviceGroup,
+    release,
+    subscription,
+    application,
 };
