@@ -1,5 +1,7 @@
-const validateSchema = require('./validateSchema.middleware');
+const validateSchema = require("./validateSchema.middleware");
+const verifyGoogleIdToken = require("./verifyGoogleIdToken.middleware");
 
 module.exports = {
-    validateSchema,
+  validateSchema,
+  verifyGoogleIdToken,
 };
