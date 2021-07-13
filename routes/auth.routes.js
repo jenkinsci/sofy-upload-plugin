@@ -4,6 +4,13 @@ const {
   auth: { login, register },
 } = require("../controller");
 
+const { verifyGoogleIdToken } = require("../middlewares");
+
+router.post("/social/google", verifyGoogleIdToken, (req, res) => {
+  // TODO: handle session here
+  res.json(req.user);
+});
+
 router.post("/login", async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
