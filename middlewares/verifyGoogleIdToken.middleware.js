@@ -1,13 +1,8 @@
 const createError = require("http-errors");
 const { OAuth2Client } = require("google-auth-library");
-const { GOGOLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOGOLE_REDIRECT_URI } =
-  process.env;
+const { GOGOLE_CLIENT_ID } = process.env;
 
-const client = new OAuth2Client(
-  GOGOLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-  GOGOLE_REDIRECT_URI
-);
+const client = new OAuth2Client();
 
 module.exports = async (req, res, next) => {
   const { idToken } = req.body;
@@ -15,7 +10,7 @@ module.exports = async (req, res, next) => {
   try {
     const ticket = await client.verifyIdToken({
       idToken,
-      audience: process.env.GOGOLE_CLIENT_ID,
+      audience: GOGOLE_CLIENT_ID,
     });
 
     const { email, name, picture, sub } = ticket.getPayload();
