@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const { sequelize } = require('../config/sequelize');
+const { DataTypes } = require("sequelize");
+const { sequelize } = require("../config/sequelize");
 
-const Platform = sequelize.define('Platform', {
+const Platform = sequelize.define("Platform", {
   platformId: {
     type: DataTypes.BIGINT,
     primaryKey: true,
@@ -10,11 +10,12 @@ const Platform = sequelize.define('Platform', {
   name: { type: DataTypes.STRING, allowNull: false },
 });
 
-const associate = () => Platform.hasMany(sequelize.models.Application, {
-  onDelete: 'NO ACTION',
-  foreignKey: { name: 'platformId', allowNull: false },
-  sourceKey: 'platformId',
-});
+const associate = () =>
+  Platform.hasMany(sequelize.models.Application, {
+    onDelete: "NO ACTION",
+    foreignKey: { name: "platformId", allowNull: false },
+    sourceKey: "platformId",
+  });
 
 module.exports = {
   Platform,
