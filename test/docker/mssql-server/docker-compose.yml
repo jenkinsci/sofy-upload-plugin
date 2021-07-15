@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+    mssql-server:
+        build:
+            context: .
+        environment:
+            - SA_PASSWORD=P@ssword
+            - ACCEPT_EULA=Y
+            - MSSQL_PID=Standard
+        ports:
+            - "1433:1433"
