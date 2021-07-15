@@ -8,7 +8,7 @@ module.exports = {
     "recursive": true,
     "exit": true,
     "package": "./package.json",
-    "require": [
+    "file": [
         "./test/common.js"
     ]
 }

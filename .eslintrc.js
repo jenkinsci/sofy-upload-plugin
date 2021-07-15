@@ -16,9 +16,12 @@ module.exports = {
             code: 140,
             ignoreComments: true,
         }],
-        'no-shadow': ['error', {
-            builtinGlobals: true,
-        }],
         indent: ['error', 4],
+        'prefer-arrow-callback': 0,
+        'func-names': 0,
+        'mocha/no-top-level-hooks': 0,
+        'mocha/no-hooks-for-single-case': 0,
+        'import/no-unresolved': 0,
+        'no-shadow': 0,
     },
 };
