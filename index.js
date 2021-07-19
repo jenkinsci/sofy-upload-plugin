@@ -4,8 +4,10 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const db = require('./config/db');
+require('./config/sequelize');
+
 const passport = require('./config/passport');
-const routes = require('./routes');
+const routes = require('./lib/routes');
 
 (async () => {
     dotenv.config();
