@@ -6,7 +6,8 @@
     "paths": {
       "@models": ["./lib/models"],
       "@controllers": ["./lib/controllers"],
-      "@routes": ["./lib/routes"]
+      "@routes": ["./lib/routes"],
+      "@services": ["./lib/services"],
     }
   },
   "exclude": ["node_modules/**"],

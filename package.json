@@ -17,10 +17,12 @@
         "module-alias": "^2.2.2",
         "moment": "^2.29.1",
         "mssql": "^6.3.1",
+        "nodemailer": "^6.6.3",
         "passport": "^0.4.1",
         "passport-jwt": "^4.0.0",
         "sequelize": "^6.6.2",
-        "tedious": "^11.0.7"
+        "tedious": "^11.0.7",
+        "uuid": "^8.3.2"
     },
     "scripts": {
         "test": "mocha"
@@ -48,6 +50,7 @@
     "_moduleAliases": {
         "@models": "./lib/models",
         "@controllers": "./lib/controllers",
-        "@routes": "./lib/routes"
+        "@routes": "./lib/routes",
+        "@services": "./lib/services"
     }
 }
