@@ -11,6 +11,7 @@ const {
 
 const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
     host: DB_HOST,
+    // eslint-disable-next-line no-console
     logging: console.log,
     dialect: 'mssql',
     dialectOptions: {
@@ -21,17 +22,20 @@ const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
 });
 
 models.UserModel.init(sequelize);
+models.UserModel.associate();
+
+models.UserCode.init(sequelize);
+models.UserCode.associate();
 
 // (async () => {
 //     try {
-//         // await sequelize.sync();
 //         debugger;
+//         // await sequelize.sync();
 //         await sequelize.sync({ force: true });
 //         console.log('Model synced successfully');
 //         debugger;
 //     } catch (error) {
 //         console.log(error);
-//         debugger;
 //     }
 // })();
 
