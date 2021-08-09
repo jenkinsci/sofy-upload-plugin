@@ -23,5 +23,7 @@ module.exports = {
         'mocha/no-hooks-for-single-case': 0,
         'import/no-unresolved': 0,
         'no-shadow': 0,
+        'no-restricted-syntax': 0,
+        'mocha/no-setup-in-describe': 0,
     },
 };

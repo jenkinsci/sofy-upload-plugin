@@ -16,7 +16,6 @@ describe('lib/controllers/Auth.controller.js', function () {
 
     describe('@Constructor', function () {
         it('should successfully initialize auth controller', function () {
-            authController.should.be.instanceOf(AuthController);
             authController.UserModel.should.equal(UserModel);
         });
 
