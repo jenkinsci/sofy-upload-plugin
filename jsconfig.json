@@ -8,6 +8,7 @@
       "@controllers": ["./lib/controllers"],
       "@routes": ["./lib/routes"],
       "@services": ["./lib/services"],
+      "@utilities": ["./lib/utilities"],
     }
   },
   "exclude": ["node_modules/**"],
