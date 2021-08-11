@@ -51,6 +51,7 @@
         "@models": "./lib/models",
         "@controllers": "./lib/controllers",
         "@routes": "./lib/routes",
-        "@services": "./lib/services"
+        "@services": "./lib/services",
+        "@utilities": "./lib/utilities"
     }
 }
