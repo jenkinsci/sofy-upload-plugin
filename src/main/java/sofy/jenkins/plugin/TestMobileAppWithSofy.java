@@ -51,7 +51,6 @@ public class TestMobileAppWithSofy extends Recorder {
 
     @DataBoundConstructor
     public TestMobileAppWithSofy(String apiToken, String apkPath) {
-        this.apiToken = apiToken;
         this.buildPath = apkPath;
         this.apiToken = Secret.fromString(apiToken).getEncryptedValue();
     }
@@ -60,8 +59,6 @@ public class TestMobileAppWithSofy extends Recorder {
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
         try {
             listener.getLogger().println("Preparing to Upload build to Sofy.");
-            listener.getLogger().println(this.apiToken);
-            listener.getLogger().println(Secret.fromString(this.apiToken).getPlainText());
             String buildLocation = build.getWorkspace() + "/" + this.buildPath;
             String testRunInfo = stageMobileTestRun(listener.getLogger(), buildLocation);
 //            if (testRunInfo != null && !testRunInfo.isEmpty()) {
