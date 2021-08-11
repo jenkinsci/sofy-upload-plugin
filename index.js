@@ -19,7 +19,7 @@ const routes = require('./lib/routes');
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(cors());
-    app.use(routes);
+    app.use(routes.AuthRouter);
 
     app.use((err, req, res, next) => {
         console.error(err);
