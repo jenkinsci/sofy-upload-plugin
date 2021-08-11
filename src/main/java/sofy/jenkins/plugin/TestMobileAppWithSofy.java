@@ -1,6 +1,11 @@
 package sofy.jenkins.plugin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hudson.Util;
+import org.acegisecurity.AccessDeniedException;
+import hudson.util.Secret;
+import jenkins.model.Jenkins;
 import hudson.Extension;
 import hudson.Launcher;
 import hudson.model.AbstractBuild;
@@ -41,18 +46,22 @@ public class TestMobileAppWithSofy extends Recorder {
 
     private String apiToken;
     private String buildPath;
+    private Secret secret;
 //    private CreateMobileTestRunResponse testRunResponse;
 
     @DataBoundConstructor
     public TestMobileAppWithSofy(String apiToken, String apkPath) {
         this.apiToken = apiToken;
         this.buildPath = apkPath;
+        this.apiToken = Secret.fromString(apiToken).getEncryptedValue();
     }
 
     @Override
     public boolean perform(AbstractBuild build, Launcher launcher, BuildListener listener) {
         try {
             listener.getLogger().println("Preparing to Upload build to Sofy.");
+            listener.getLogger().println(this.apiToken);
+            listener.getLogger().println(Secret.fromString(this.apiToken).getPlainText());
             String buildLocation = build.getWorkspace() + "/" + this.buildPath;
             String testRunInfo = stageMobileTestRun(listener.getLogger(), buildLocation);
 //            if (testRunInfo != null && !testRunInfo.isEmpty()) {
@@ -75,7 +84,7 @@ public class TestMobileAppWithSofy extends Recorder {
         // set Subscription Key
         String subKey = this.apiToken;
         try {
-            subKey = UUID.fromString(this.apiToken).toString();
+            subKey = UUID.fromString(Secret.fromString(this.apiToken).getPlainText()).toString();
         } catch (Exception e) {
             e.printStackTrace();
             logger.println("Invalid API Key, unable to Stage test run on Sofy.ai. Please refresh your API Key");
@@ -136,7 +145,7 @@ public class TestMobileAppWithSofy extends Recorder {
     }
 
 
-    @Symbol("createMobileTestRun")
+    @Symbol("Sofy Upload")
     @Extension
     public static final class DescriptorImpl extends BuildStepDescriptor<Publisher> {
 
@@ -151,12 +160,22 @@ public class TestMobileAppWithSofy extends Recorder {
         }
 
 
-        public FormValidation doCheckAuthTokenValidity(@QueryParameter("apiToken") final String apiToken) {
+        public FormValidation doCheckAuthTokenValidity(@QueryParameter("apiToken") final String apiToken) throws AccessDeniedException {
 
             try {
+                try {
+                    Jenkins.get().checkPermission(Jenkins.ADMINISTER);// or Jenkins.getInstance() on older core baselines
+                } catch (Exception e){
+                    e.printStackTrace();
+                    System.out.println("Access Denied");
+                }
+                if (Util.fixEmptyAndTrim(apiToken) == null) {
+                    return FormValidation.error("Api Token cannot be empty");
+                }
                 if (checkApiTokenExists(apiToken.trim())) {
                     return FormValidation.ok("Your API Key is valid");
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Invalid API Key Entered");

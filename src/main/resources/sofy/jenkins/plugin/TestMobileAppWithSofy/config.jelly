@@ -3,11 +3,11 @@
          xmlns:t="/lib/hudson" xmlns:f="/lib/form">
 
     <f:entry title="${%Enter your Sofy API key}" field="apiToken" help="/sofy-upload/help-apiKey.html">
-        <f:textbox/>
+        <f:password/>
     </f:entry>
 
     <f:validateButton title="${%Check API Key validity}" progress="${%Checking...}" method="checkAuthTokenValidity"
-                      with="apiToken">
+                     checkMethod="post" with="apiToken">
     </f:validateButton>
 
     <f:entry title="${%Enter Build Location}" field="apkPath" help="/sofy-upload/help-apkPath.html">
