@@ -27,11 +27,16 @@ models.UserModel.associate();
 models.UserCode.init(sequelize);
 models.UserCode.associate();
 
+models.ApplicationModel.init(sequelize);
+models.ApplicationModel.associate();
+
+models.ReleaseModel.init(sequelize);
+models.ReleaseModel.associate();
 // (async () => {
 //     try {
 //         debugger;
-//         // await sequelize.sync();
-//         await sequelize.sync({ force: true });
+//         await sequelize.sync();
+//         // await sequelize.sync({ force: true });
 //         console.log('Model synced successfully');
 //         debugger;
 //     } catch (error) {
