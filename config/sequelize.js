@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-debugger */
 const { Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 
@@ -32,11 +34,18 @@ models.ApplicationModel.associate();
 
 models.ReleaseModel.init(sequelize);
 models.ReleaseModel.associate();
+
+models.ApplicationPackageModel.init(sequelize);
+models.ApplicationPackageModel.associate();
+
+models.PlatformModel.init(sequelize);
+models.PlatformModel.associate(sequelize);
 // (async () => {
 //     try {
 //         debugger;
-//         await sequelize.sync();
-//         // await sequelize.sync({ force: true });
+//         // await sequelize.sync();
+//         await sequelize.sync({ force: true });
+//         // eslint-disable-next-line no-console
 //         console.log('Model synced successfully');
 //         debugger;
 //     } catch (error) {
